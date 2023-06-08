@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "proyecto-veterinario",
+  "private_key_id": "4ebf4cff0b34702914104cba892d91e3921f120c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCYiVs6Q4HxFyzB\nglE2zcDFm1eeeCHtGI887OSkAKl1uDpa2hkhHTVPwPaWsUybpaGW6vE1EgwhThfa\nLExIFslWoB1Jt2rIlDFGc9mF4imUL/EQFrvZJJVn7QxYGlFOWJM6ifFeNeIj2s1/\nW0zTiVtShuU9gqKaxCMoHh1twEBuyONDkgDgLUGibkLxznb6++RHYCJI8mtDBvl8\nFcljFtlFXZktEprt2DlWn8nB1OiOjvY65FVZ664p8mp7jFddQjlmOUldbKZq2XNU\nyeEKOQNs5rfaM23Ja5jO4n9D2NNgr0jMZBox0VAOMhqmiBkVL7lx1/wztjitKQxw\nYEnqlijpAgMBAAECggEADkW+6JwXsNtsY4RaLUSyAoNjHseqk/zZ7TdUuvA5avOE\nmUriMk4hdn+NiyLWklM8hAqibGbuheDA3FgMAKxKJT3405STDCbKmAcfvbZgUdZt\nCcZ4x+vzg1yDrMw0mp4w03fEAv7LdLOkygN81Ce8aOPImBlstcq/p+Guev4TwVHL\nZuA1RlF2W7e6Onv55uiQlvUFRTZSFXXLOpFh8VB2Z98ng3XDpLiaT2tNxj31Veui\nVhrQUfsxdSBxJiw5r974rI9FdOXBzzBQTA7w/PDNFsiGxYGKe7ZGg/nNrlu23Fex\nRq07VRW6De7JfClIK+pBPI14gIig+TDIQh68c7eYEQKBgQDOhjSnHKLZxZ2uUuGc\nhhD5WuAkv/gbczFnZ4mF8qLAF2qiFAfcOOdI2Eo1VS5u2989izol2aCTiLqpXYHD\n2X382luyo6anIEjvt4eTJJLrSmlShFTAyJ1ogFrbPNd6e1gL5N+zsunBdx4ZegY4\ny7q6jAtSj1Clt2jj57iut4m5eQKBgQC9FCx2ouEM2dzfRvB4IClV09PwpXNt6mav\n3hgh3b3Z/cko+H+uIOUPnX/Ik0xy/f6jqWF5qIGGNbOgzNO7NQuYtSKXXEl2IfHF\nOGsy+EA2vhEkhXQ4ccSn1FJwB41mhiTmu5vstJl+er0Bq/jDj89B8Qasbbp2OB+a\n+PyUeY1+8QKBgQCpBwI0+6T1Y13IfSEVwExIKW5l5ZAkt0TqAr11mb5GRWQKvyYn\nwZLZ9dvWhp74MJAniLnQnKtl1HQhhdxc9La+qeB+9p3BDxVizOzzKu3sEPzeglvz\nZL4f911lLgiVwDmxkmLcakQTCXDjHRHWjjeH0nK54X36A4CfdtmadbEM0QKBgELJ\nVm9NVyr/5WmkmBoGWjNr0EgHWP9xNXZXf7Suq3nNj/l91TO/gMmEO3ewt+dCWmia\n0shzQdUTMPDSiNNuiDsXeDF4sqYclVaxeAQX9i6f8lQxI30wimMxtzDFKigVqAEs\nMYZpwHIRjqOBiCwjpvTG2zGazKsnZdqKqkUTrmwxAoGADruixboUOmU7XrCXznhj\n/F2VGro706JLU97bXFTJVLXWIz6iUNV2LXMmJLK7k4YsQ+m2xu3Lv2nDYIY6YQDP\nmOYtzs+1XI0DGiEFbcSRZH3WB9fvEg0SCXzEDjubxZVXoyJkEyJEGR/9raf7MeSp\n6CHgLnnv2ITfTysJzJLdw9Q=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-7oo1v@proyecto-veterinario.iam.gserviceaccount.com",
+  "client_id": "118272094658164834304",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-7oo1v%40proyecto-veterinario.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

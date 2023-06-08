@@ -32,8 +32,8 @@ public class Mascota implements Serializable{
 	@Column(name = "sexo")
 	private Boolean sexo;
 	
-	@Column(name = "años")
-	private Integer años;
+	@Column(name = "anios")
+	private Integer anios;
 	
 	@Column(name = "meses")
 	private Integer meses;
@@ -93,11 +93,11 @@ public class Mascota implements Serializable{
 	}
 
 	public Integer getAños() {
-		return años;
+		return anios;
 	}
 
-	public void setAños(Integer años) {
-		this.años = años;
+	public void setAños(Integer anios) {
+		this.anios = anios;
 	}
 
 	public Integer getMeses() {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import idat.proyecto.veterinaria.cloud.UploadCloudStorage;
+import idat.proyecto.veterinaria.cloud.GoogleStorage;
 import idat.proyecto.veterinaria.entity.Mascota;
 import idat.proyecto.veterinaria.repository.MascotaRepository;
 
@@ -18,7 +18,7 @@ public class MascotaServiceImpl implements MascotaService {
 	@Autowired
 	private MascotaRepository repository;
 	
-	private UploadCloudStorage cloudStorage = new UploadCloudStorage("mascotas/","vet-mascota-");
+	private GoogleStorage storage = new GoogleStorage("mascotas","vet-mascota-");
 	
 	@Override
 	@Transactional
@@ -52,7 +52,7 @@ public class MascotaServiceImpl implements MascotaService {
 		Mascota mascota = findById(id);
 		if (mascota != null) {
 			mascota.setId(id);
-			mascota.setFoto(cloudStorage.uploadImage(id.toString(), file));
+			mascota.setFoto(storage.uploadImage(id.toString(), file));
 		}
 	}
 	

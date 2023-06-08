@@ -13,16 +13,16 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
-public class UploadCloudStorage {
+public class GoogleStorage {
 	
-	private String nameKeyJson = "idat-proyecto-veterinaria-spring.json";
-	private String projectId = "idat-proyecto-veterinaria";
-	private String bucketName = "idat-proyecto-veterinaria.appspot.com";
-	private String bucketRoute;
+	private String nameKeyJson = "proyecto-veterinario-firebase.json";
+	private String projectId = "proyecto-veterinario";
+	private String bucketName = "proyecto-veterinario.appspot.com";
+	private String pathName;
 	private String prefix;
 	
-	public UploadCloudStorage(String bucketRoute, String prefix) {
-		this.bucketRoute = bucketRoute;
+	public GoogleStorage(String pathName, String prefix) {
+		this.pathName = pathName;
 		this.prefix = prefix;
 	}
 	
@@ -58,7 +58,7 @@ public class UploadCloudStorage {
 	        contentType = "image/png";
 	    }
 	    
-	    BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, bucketRoute + fileName))
+	    BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, pathName + "/" + fileName))
 	        .setContentType(contentType)
 	        .build();
 
@@ -71,7 +71,9 @@ public class UploadCloudStorage {
 	        return null;
 	    }
 	    
-	    String publicUrl = "https://storage.googleapis.com/" + bucketName + "/" + bucketRoute + fileName;
+	    String publicUrl = "https://storage.googleapis.com/" + bucketName + "/" + pathName + "/" + fileName;
 	    return publicUrl;
 	}
 }
+	
+

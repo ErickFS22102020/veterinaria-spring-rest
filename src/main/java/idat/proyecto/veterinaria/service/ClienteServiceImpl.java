@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import idat.proyecto.veterinaria.cloud.UploadCloudStorage;
+import idat.proyecto.veterinaria.cloud.GoogleStorage;
 import idat.proyecto.veterinaria.entity.Cliente;
 import idat.proyecto.veterinaria.repository.ClienteRepository;
 
@@ -18,7 +18,7 @@ public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	private ClienteRepository repository;
 	
-	private UploadCloudStorage cloudStorage = new UploadCloudStorage("clientes/","vet-cliente-");
+	private GoogleStorage storage = new GoogleStorage("clientes","vet-cliente-");
 
 	@Override
 	@Transactional
@@ -52,7 +52,7 @@ public class ClienteServiceImpl implements ClienteService {
 		Cliente cliente = findById(id);
 		if (cliente != null) {
 			cliente.setId(id);
-			cliente.setFoto(cloudStorage.uploadImage(id.toString(), file));
+			cliente.setFoto(storage.uploadImage(id.toString(), file));
 		}
 	    
 	}
