@@ -11,38 +11,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import idat.proyecto.veterinaria.entity.Tratamiento;
-import idat.proyecto.veterinaria.service.TratamientoService;
+import idat.proyecto.veterinaria.entity.Boleta;
+import idat.proyecto.veterinaria.service.BoletaService;
 
 @RestController
-@RequestMapping("/tratamientos")
-public class TratamientoController {
+@RequestMapping("/boletas")
+public class BoletaController {
 	
 	@Autowired
-	private TratamientoService service;
+	private BoletaService service;
 	
 	@GetMapping
-	public ResponseEntity<?> findAllTratamientos() {
+	public ResponseEntity<?> findAllVentas() {
 		return service.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findByIdTratamiento(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> findByIdVenta(@PathVariable("id") Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insertTratamiento(@RequestBody Tratamiento tratamiento) {
-		return service.insert(tratamiento);
+	public ResponseEntity<?> insertVenta(@RequestBody Boleta boleta) {
+		return service.insert(boleta);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateTratamiento(@PathVariable("id") Integer id, @RequestBody Tratamiento tratamiento) {
-		return service.update(id, tratamiento);
+	public ResponseEntity<?> updateVenta(@PathVariable("id") Integer id, @RequestBody Boleta boleta) {
+		return service.update(id, boleta);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteTratamiento(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> deleteVenta(@PathVariable("id") Integer id) {
 		return service.delete(id);
 	}
 	

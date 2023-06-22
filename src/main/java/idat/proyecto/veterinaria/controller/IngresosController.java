@@ -1,5 +1,5 @@
 package idat.proyecto.veterinaria.controller;
 
-public class BañoController {
+public class IngresosController {
 
 }

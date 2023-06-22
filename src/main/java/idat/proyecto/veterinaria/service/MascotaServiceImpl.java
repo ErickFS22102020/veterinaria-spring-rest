@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,60 +15,100 @@ import idat.proyecto.veterinaria.entity.Mascota;
 import idat.proyecto.veterinaria.repository.MascotaRepository;
 
 @Service
-public class MascotaServiceImpl implements MascotaService {
+public class MascotaServiceImpl implements MascotaService{
 
 	@Autowired
-	private MascotaRepository repository;
+	private MascotaRepository mascotaRepository;
+	
+	@Autowired
+	private RazaService razaService;
+	
+	@Autowired
+	private ClienteService clienteService;
 	
 	private GoogleStorage storage = new GoogleStorage("mascotas","vet-mascota-");
+
+	@Override
+	@Transactional
+	public ResponseEntity<?> insert(Mascota mascota) {
+		
+		ResponseEntity<?> statusRaza = razaService.findById(mascota.getRaza().getId());
+		if (statusRaza.getStatusCode() != HttpStatus.OK) return statusRaza;
+		
+		ResponseEntity<?> statusCliente = clienteService.findById(mascota.getCliente().getId());
+		if (statusCliente.getStatusCode() != HttpStatus.OK) return statusCliente;
+		
+		mascotaRepository.save(mascota);
+		return new ResponseEntity<>("Mascota create!", HttpStatus.CREATED);
+	}
+
+	@Override
+	@Transactional
+	public ResponseEntity<?> update(Integer id, Mascota mascota) {
+		
+		ResponseEntity<?> statusMascota = findById(id);
+		if (statusMascota.getStatusCode() != HttpStatus.OK) return statusMascota;
+		Mascota mascotaFound = (Mascota) statusMascota.getBody();
+		
+		ResponseEntity<?> statusRaza = razaService.findById(mascota.getRaza().getId());
+		if (statusRaza.getStatusCode() != HttpStatus.OK) return statusRaza;
+		
+		ResponseEntity<?> statusCliente = clienteService.findById(mascota.getCliente().getId());
+		if (statusCliente.getStatusCode() != HttpStatus.OK) return statusCliente;
+		
+		mascota.setId(id);
+		mascota.setFecha_creacion(mascotaFound.getFecha_creacion());
+		mascota.setEliminado(false);
+		mascotaRepository.save(mascota);
+		return new ResponseEntity<>("Mascota update!", HttpStatus.OK);
+	}
+
+	@Override
+	@Transactional
+	public ResponseEntity<?> delete(Integer id) {
+		
+		ResponseEntity<?> statusMascota = findById(id);
+		if (statusMascota.getStatusCode() != HttpStatus.OK) return statusMascota;
+		Mascota mascotaFound = (Mascota) statusMascota.getBody();
+		mascotaFound.setEliminado(true);
+		
+		return new ResponseEntity<>("Mascota delete!", HttpStatus.OK);
+		
+	}
+
+	@Override
+	public ResponseEntity<?> findById(Integer id) {
+		Mascota mascota = mascotaRepository.findById(id).orElse(null);
+		if(mascota == null || mascota.getEliminado()) {
+			return new ResponseEntity<>("Mascota " + id + " not found!", HttpStatus.NOT_FOUND);
+			
+		}
+		return new ResponseEntity<>(mascota, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<?> findAll() {
+		Collection<Mascota> coleccion = mascotaRepository.findAll().stream().filter(mascota -> !mascota.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
 	
 	@Override
 	@Transactional
-	public void insert(Mascota mascota) {
-		repository.save(mascota);
-	}
-	
-	@Override
-	@Transactional
-	public void update(Integer id, Mascota mascota) {
-		Mascota mascotaFound = findById(id);
-		if (mascotaFound != null) {
-			mascota.setId(id);
-			mascota.setFoto(mascotaFound.getFoto());
-			repository.save(mascota);
+	public ResponseEntity<?> setFoto(Integer id, MultipartFile file) {
+		
+		ResponseEntity<?> statusMascota = findById(id);
+		if (statusMascota.getStatusCode() != HttpStatus.OK) return statusMascota;
+		Mascota mascotaFound = (Mascota) statusMascota.getBody();
+		
+		try {
+			mascotaFound.setFoto(storage.uploadImage(id.toString(), file));
+			return new ResponseEntity<>("Foto Mascota saved!", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Ocurrio un error, intente nuevamente...", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@Override
-	@Transactional
-	public void delete(Integer id) {
-		Mascota mascota = findById(id);
-		if (mascota != null) {
-			mascota.setEliminado(true);
-		}
-	}
-	
-	@Override
-	@Transactional
-	public void setFoto(Integer id, MultipartFile file) {
-		Mascota mascota = findById(id);
-		if (mascota != null) {
-			mascota.setId(id);
-			mascota.setFoto(storage.uploadImage(id.toString(), file));
-		}
-	}
-	
-	@Override
-	public Mascota findById(Integer id) {
-		Mascota mascota = repository.findById(id).orElse(null);
-		if(mascota != null && !mascota.getEliminado()) {
-			return mascota;
-		}
-		return null;
-	}
-	
-	@Override
-	public Collection<Mascota> findAll() {
-		return repository.findAll().stream().filter(mascota -> !mascota.getEliminado()).collect(Collectors.toList());
-	}
+
 }

@@ -1,5 +1,9 @@
 package idat.proyecto.veterinaria.repository;
 
-public interface ProductoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import idat.proyecto.veterinaria.entity.Producto;
+
+public interface ProductoRepository extends JpaRepository<Producto, Integer>{
 
 }

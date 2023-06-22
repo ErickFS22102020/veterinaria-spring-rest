@@ -1,6 +1,7 @@
 package idat.proyecto.veterinaria.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="raza")
@@ -29,10 +34,19 @@ public class Raza implements Serializable{
     private Boolean eliminado;
     
     @ManyToOne
-    @JoinColumn(name="especie_id", referencedColumnName="id")
+    @JoinColumn(name="especie_id")
     private Especie especie;
     
+    @JsonIgnore
+    @OneToMany(mappedBy = "raza")
+    private Collection<Mascota> mascotas;
+    
     public Raza() {}
+    
+    @PrePersist
+	public void prePersist() {
+		eliminado = false;
+	}
 
 	public Integer getId() {
 		return id;
@@ -50,6 +64,14 @@ public class Raza implements Serializable{
 		this.nombre = nombre;
 	}
 
+	public Boolean getEliminado() {
+		return eliminado;
+	}
+
+	public void setEliminado(Boolean eliminado) {
+		this.eliminado = eliminado;
+	}
+
 	public Especie getEspecie() {
 		return especie;
 	}
@@ -57,13 +79,13 @@ public class Raza implements Serializable{
 	public void setEspecie(Especie especie) {
 		this.especie = especie;
 	}
-	
-	public Boolean getEliminado() {
-		return eliminado;
+
+	public Collection<Mascota> getMascotas() {
+		return mascotas;
 	}
 
-	public void setEliminado(Boolean eliminado) {
-		this.eliminado = eliminado;
+	public void setMascotas(Collection<Mascota> mascotas) {
+		this.mascotas = mascotas;
 	}
 
 }

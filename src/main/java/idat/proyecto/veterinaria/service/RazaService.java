@@ -1,14 +1,14 @@
 package idat.proyecto.veterinaria.service;
 
-import java.util.Collection;
+import org.springframework.http.ResponseEntity;
 
 import idat.proyecto.veterinaria.entity.Raza;
 
 public interface RazaService {
 
-	public abstract void insert(Raza raza);
-	public abstract void update(Integer id, Raza raza);
-	public abstract void delete(Integer id);
-	public abstract Raza findById(Integer id);
-	public abstract Collection<Raza> findAll();
+	public abstract ResponseEntity<?> insert(Raza raza);
+	public abstract ResponseEntity<?> update(Integer id, Raza raza);
+	public abstract ResponseEntity<?> delete(Integer id);
+	public abstract ResponseEntity<?> findById(Integer id);
+	public abstract ResponseEntity<?> findAll();
 }

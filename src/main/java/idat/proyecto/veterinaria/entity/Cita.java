@@ -1,7 +1,7 @@
 package idat.proyecto.veterinaria.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,27 +14,27 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tratamiento")
-public class Tratamiento implements Serializable{
-
+@Table(name = "cita")
+public class Cita implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+	private Integer id;
 	
-	@Column(name = "fecha_creacion")
-	private LocalDate fecha_creacion;
+	@Column(name = "fecha_programada")
+	private LocalDateTime fecha_programada;
 	
-	@Column(name = "tipo")
-	private String tipo;
+	@Column(name = "fecha_atendida")
+	private LocalDateTime fecha_atendida;
 	
-	@Column(name = "precio")
-	private Double precio;
+	@Column(name = "estado")
+	private String estado;
 	
-	@Column(name = "descripcion")
-	private String descripcion;
+	@Column(name = "motivo")
+	private String motivo;
 	
 	@Column(name = "eliminado")
 	private Boolean eliminado;
@@ -42,15 +42,14 @@ public class Tratamiento implements Serializable{
 	@ManyToOne
     @JoinColumn(name = "mascota_id")
 	private Mascota mascota;
-	
-	public Tratamiento() {}
+	                             
+	public Cita() {}
 	
 	@PrePersist
 	public void prePersist() {
-		fecha_creacion = LocalDate.now();
 		eliminado = false;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -59,36 +58,36 @@ public class Tratamiento implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getFecha_creacion() {
-		return fecha_creacion;
+	public LocalDateTime getFecha_programada() {
+		return fecha_programada;
 	}
 
-	public void setFecha_creacion(LocalDate fecha_creacion) {
-		this.fecha_creacion = fecha_creacion;
+	public void setFecha_programada(LocalDateTime fecha_programada) {
+		this.fecha_programada = fecha_programada;
 	}
 
-	public String getTipo() {
-		return tipo;
+	public LocalDateTime getFecha_atendida() {
+		return fecha_atendida;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setFecha_atendida(LocalDateTime fecha_atendida) {
+		this.fecha_atendida = fecha_atendida;
 	}
 
-	public Double getPrecio() {
-		return precio;
+	public String getEstado() {
+		return estado;
 	}
 
-	public void setPrecio(Double precio) {
-		this.precio = precio;
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getMotivo() {
+		return motivo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
 	}
 
 	public Boolean getEliminado() {
@@ -106,5 +105,5 @@ public class Tratamiento implements Serializable{
 	public void setMascota(Mascota mascota) {
 		this.mascota = mascota;
 	}
-	
+
 }

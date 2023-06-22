@@ -1,8 +1,7 @@
 package idat.proyecto.veterinaria.controller;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,33 +24,33 @@ public class ClienteController {
 	private ClienteService service;
 	
 	@GetMapping
-	public Collection<Cliente> findAllClientes() {
+	public ResponseEntity<?> findAllClientes() {
 		return service.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public Cliente findByIdCliente(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> findByIdCliente(@PathVariable("id") Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public void insertCliente(@RequestBody Cliente cliente) {
-		service.insert(cliente);
+	public ResponseEntity<?> insertCliente(@RequestBody Cliente cliente) {
+		return service.insert(cliente);
 	}
 	
 	@PutMapping("/{id}")
-	public void updateCliente(@PathVariable("id") Integer id, @RequestBody Cliente cliente) {
-		service.update(id, cliente);
+	public ResponseEntity<?> updateCliente(@PathVariable("id") Integer id, @RequestBody Cliente cliente) {
+		return service.update(id, cliente);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteCliente(@PathVariable("id") Integer id) {
-		service.delete(id);
+	public ResponseEntity<?> deleteCliente(@PathVariable("id") Integer id) {
+		return service.delete(id);
 	}
 	
 	@PostMapping("/setFoto/{id}")
-    public void uploadImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
-        service.setFoto(id, file);
+    public ResponseEntity<?> saveImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+        return service.setFoto(id, file);
     }
 	
 }

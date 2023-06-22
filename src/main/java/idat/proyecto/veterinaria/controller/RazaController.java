@@ -1,8 +1,7 @@
 package idat.proyecto.veterinaria.controller;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,28 +22,28 @@ public class RazaController {
 	private RazaService service;
 	
 	@GetMapping
-	public Collection<Raza> findAllRazas() {
+	public ResponseEntity<?> findAllRazas() {
 		return service.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public Raza findByIdRaza(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> findByIdRaza(@PathVariable("id") Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public void insertRaza(@RequestBody Raza raza) {
-		service.insert(raza);
+	public ResponseEntity<?> insertRaza(@RequestBody Raza raza) {
+		return service.insert(raza);
 	}
 	
 	@PutMapping("/{id}")
-	public void updateRaza(@PathVariable("id") Integer id, @RequestBody Raza raza) {
-		service.update(id, raza);
+	public ResponseEntity<?> updateRaza(@PathVariable("id") Integer id, @RequestBody Raza raza) {
+		return service.update(id, raza);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteRaza(@PathVariable("id") Integer id) {
-		service.delete(id);
+	public ResponseEntity<?> deleteRaza(@PathVariable("id") Integer id) {
+		return service.delete(id);
 	}
 	
 }

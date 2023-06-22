@@ -1,18 +1,16 @@
 package idat.proyecto.veterinaria.service;
 
-import java.util.Collection;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import idat.proyecto.veterinaria.entity.Cliente;
 
 public interface ClienteService {
-	
-	public abstract void insert(Cliente cliente);
-	public abstract void update(Integer id, Cliente cliente);
-	public abstract void delete(Integer id);
-	public abstract void setFoto(Integer id, MultipartFile file);
-	public abstract Cliente findById(Integer id);
-	public abstract Collection<Cliente> findAll();
-	
+	public abstract ResponseEntity<?> insert(Cliente cliente);
+	public abstract ResponseEntity<?> update(Integer id, Cliente cliente);
+	public abstract ResponseEntity<?> delete(Integer id);
+	public abstract ResponseEntity<?> findById(Integer id);
+	public abstract ResponseEntity<?> findAll();
+	public abstract ResponseEntity<?> setFoto(Integer id, MultipartFile file);
 }

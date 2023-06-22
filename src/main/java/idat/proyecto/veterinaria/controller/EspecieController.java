@@ -1,8 +1,7 @@
 package idat.proyecto.veterinaria.controller;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,27 +22,27 @@ public class EspecieController {
 	private EspecieService service;
 	
 	@GetMapping
-	public Collection<Especie> findAllEspecies() {
+	public ResponseEntity<?> findAllEspecies() {
 		return service.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public Especie findByIdEspecie(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> findByIdEspecie(@PathVariable("id") Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public void insertEspecie(@RequestBody Especie especie) {
-		service.insert(especie);
+	public ResponseEntity<?> insertEspecie(@RequestBody Especie especie) {
+		return service.insert(especie);
 	}
 	
 	@PutMapping("/{id}")
-	public void updateEspecie(@PathVariable("id") Integer id, @RequestBody Especie especie) {
-		service.update(id, especie);
+	public ResponseEntity<?> updateEspecie(@PathVariable("id") Integer id, @RequestBody Especie especie) {
+		return service.update(id, especie);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteEspecie(@PathVariable("id") Integer id) {
-		service.delete(id);
+	public ResponseEntity<?> deleteEspecie(@PathVariable("id") Integer id) {
+		return service.delete(id);
 	}
 }

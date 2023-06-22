@@ -2,6 +2,7 @@ package idat.proyecto.veterinaria.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="mascota")
@@ -44,21 +49,39 @@ public class Mascota implements Serializable{
 	@Column(name = "descripcion")
 	private String descripcion;
 	
-	@Column(name = "foto", columnDefinition = "TEXT")
+	@Column(name = "foto")
     private String foto;
 	
 	@Column(name = "eliminado")
     private Boolean eliminado;
 	
 	@ManyToOne
-    @JoinColumn(name="raza_id", referencedColumnName="id")
+    @JoinColumn(name="raza_id")
     private Raza raza;
 	
 	@ManyToOne
-    @JoinColumn(name="cliente_id", referencedColumnName="id")
+    @JoinColumn(name="cliente_id")
     private Cliente cliente;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy="mascota")
+    private Collection<Banio> banios;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="mascota")
+    private Collection<Tratamiento> tratamientos;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="mascota")
+    private Collection<Cita> citas;
+	
 	public Mascota() {}
+	
+	@PrePersist
+	public void prePersist() {
+		fecha_creacion = LocalDate.now();
+		eliminado = false;
+	}
 
 	public Integer getId() {
 		return id;
@@ -92,11 +115,11 @@ public class Mascota implements Serializable{
 		this.sexo = sexo;
 	}
 
-	public Integer getAños() {
+	public Integer getAnios() {
 		return anios;
 	}
 
-	public void setAños(Integer anios) {
+	public void setAnios(Integer anios) {
 		this.anios = anios;
 	}
 
@@ -155,4 +178,29 @@ public class Mascota implements Serializable{
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
+	public Collection<Banio> getBanios() {
+		return banios;
+	}
+
+	public void setBanios(Collection<Banio> banios) {
+		this.banios = banios;
+	}
+
+	public Collection<Tratamiento> getTratamientos() {
+		return tratamientos;
+	}
+
+	public void setTratamientos(Collection<Tratamiento> tratamientos) {
+		this.tratamientos = tratamientos;
+	}
+
+	public Collection<Cita> getCitas() {
+		return citas;
+	}
+
+	public void setCitas(Collection<Cita> citas) {
+		this.citas = citas;
+	}
+	
 }

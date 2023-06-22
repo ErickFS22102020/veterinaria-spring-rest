@@ -14,15 +14,15 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tratamiento")
-public class Tratamiento implements Serializable{
-
+@Table(name = "banio")
+public class Banio implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+	private Integer id;
 	
 	@Column(name = "fecha_creacion")
 	private LocalDate fecha_creacion;
@@ -33,8 +33,14 @@ public class Tratamiento implements Serializable{
 	@Column(name = "precio")
 	private Double precio;
 	
-	@Column(name = "descripcion")
-	private String descripcion;
+	@Column(name = "detalles")
+	private String detalles;
+	
+	@Column(name = "foto_entrada")
+	private String foto_entrada;
+	
+	@Column(name = "foto_salida")
+	private String foto_salida;
 	
 	@Column(name = "eliminado")
 	private Boolean eliminado;
@@ -43,8 +49,8 @@ public class Tratamiento implements Serializable{
     @JoinColumn(name = "mascota_id")
 	private Mascota mascota;
 	
-	public Tratamiento() {}
-	
+	public Banio() {}
+
 	@PrePersist
 	public void prePersist() {
 		fecha_creacion = LocalDate.now();
@@ -83,12 +89,28 @@ public class Tratamiento implements Serializable{
 		this.precio = precio;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getDetalles() {
+		return detalles;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setDetalles(String detalles) {
+		this.detalles = detalles;
+	}
+
+	public String getFoto_entrada() {
+		return foto_entrada;
+	}
+
+	public void setFoto_entrada(String foto_entrada) {
+		this.foto_entrada = foto_entrada;
+	}
+
+	public String getFoto_salida() {
+		return foto_salida;
+	}
+
+	public void setFoto_salida(String foto_salida) {
+		this.foto_salida = foto_salida;
 	}
 
 	public Boolean getEliminado() {
@@ -106,5 +128,5 @@ public class Tratamiento implements Serializable{
 	public void setMascota(Mascota mascota) {
 		this.mascota = mascota;
 	}
-	
+
 }

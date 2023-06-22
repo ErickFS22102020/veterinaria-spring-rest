@@ -15,12 +15,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="especie")
-public class Especie implements Serializable{
+@Table(name="categoria")
+public class Categoria implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-    
-    @Id
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -32,10 +32,10 @@ public class Especie implements Serializable{
     private Boolean eliminado;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "especie")
-    private Collection<Raza> razas;
+    @OneToMany(mappedBy = "categoria")
+    private Collection<Producto> productos;
     
-    public Especie() {}
+    public Categoria() {}
     
     @PrePersist
 	public void prePersist() {
@@ -57,7 +57,7 @@ public class Especie implements Serializable{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
+
 	public Boolean getEliminado() {
 		return eliminado;
 	}
@@ -66,12 +66,12 @@ public class Especie implements Serializable{
 		this.eliminado = eliminado;
 	}
 
-	public Collection<Raza> getRazas() {
-		return razas;
+	public Collection<Producto> getProductos() {
+		return productos;
 	}
 
-	public void setRazas(Collection<Raza> razas) {
-		this.razas = razas;
+	public void setProductos(Collection<Producto> productos) {
+		this.productos = productos;
 	}
 
 }
