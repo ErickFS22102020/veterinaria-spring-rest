@@ -53,7 +53,7 @@
 		    <artifactId>google-cloud-storage</artifactId>
 		    <version>2.3.0</version>
 		</dependency>
-
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

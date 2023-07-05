@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import idat.proyecto.veterinaria.custom.CategoriaCustom;
 import idat.proyecto.veterinaria.entity.Categoria;
+import idat.proyecto.veterinaria.mapper.CategoriaMapper;
 import idat.proyecto.veterinaria.repository.CategoriaRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService{
@@ -22,7 +25,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Transactional
 	public ResponseEntity<?> insert(Categoria categoria) {
 		categoriaRepository.save(categoria);
-		return new ResponseEntity<>("Categoria create!", HttpStatus.CREATED);
+		return new ResponseEntity<>(Response.createMap("Categoria create!", categoria.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -35,7 +38,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 		categoria.setId(id);
 		categoria.setEliminado(false);
 		categoriaRepository.save(categoria);
-		return new ResponseEntity<>("Categoria update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Categoria update!", categoria.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -47,7 +50,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 		Categoria categoriaFound = (Categoria) statusCategoria.getBody();
 		categoriaFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Categoria delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Categoria delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -55,7 +58,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	public ResponseEntity<?> findById(Integer id) {
 		Categoria categoria = categoriaRepository.findById(id).orElse(null);
 		if(categoria == null || categoria.getEliminado()) {
-			return new ResponseEntity<>("Categoria " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Categoria not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(categoria, HttpStatus.OK);
@@ -64,6 +67,24 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Override
 	public ResponseEntity<?> findAll() {
 		Collection<Categoria> coleccion = categoriaRepository.findAll().stream().filter(categoria -> !categoria.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<CategoriaCustom> coleccion = categoriaRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<CategoriaMapper> coleccion = categoriaRepository.findAllMapper();
 		if (coleccion.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

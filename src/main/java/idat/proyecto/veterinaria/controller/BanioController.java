@@ -24,27 +24,42 @@ public class BanioController {
 	private BanioService service;
 	
 	@GetMapping
-	public ResponseEntity<?> findAllBanos() {
+	public ResponseEntity<?> findAllBanios() {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllBaniosCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllBaniosMapper() {
+		return service.findAllMapper();
+	}
+	
+	@GetMapping("/mascota_id/{id}")
+	public ResponseEntity<?> findAllBaniosByMascotaId(@PathVariable("id") Integer id) {
+		return service.findAllByMascotaId(id);
+	}
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findByIdBano(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> findByIdBanio(@PathVariable("id") Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insertBano(@RequestBody Banio banio) {
+	public ResponseEntity<?> insertBanio(@RequestBody Banio banio) {
 		return service.insert(banio);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBano(@PathVariable("id") Integer id, @RequestBody Banio banio) {
+	public ResponseEntity<?> updateBanio(@PathVariable("id") Integer id, @RequestBody Banio banio) {
 		return service.update(id, banio);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteBano(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> deleteBanio(@PathVariable("id") Integer id) {
 		return service.delete(id);
 	}
 	

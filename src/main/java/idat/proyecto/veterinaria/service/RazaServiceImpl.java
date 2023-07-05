@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import idat.proyecto.veterinaria.custom.RazaCustom;
 import idat.proyecto.veterinaria.entity.Raza;
+import idat.proyecto.veterinaria.mapper.RazaMapper;
 import idat.proyecto.veterinaria.repository.RazaRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class RazaServiceImpl implements RazaService{
@@ -29,7 +32,7 @@ public class RazaServiceImpl implements RazaService{
 		if (statusEspecie.getStatusCode() != HttpStatus.OK) return statusEspecie;
 		
 		razaRepository.save(raza);
-		return new ResponseEntity<>("Raza create!", HttpStatus.CREATED);
+		return new ResponseEntity<>(Response.createMap("Raza create!", raza.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class RazaServiceImpl implements RazaService{
 		raza.setId(id);
 		raza.setEliminado(false);
 		razaRepository.save(raza);
-		return new ResponseEntity<>("Raza update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Raza update!", raza.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class RazaServiceImpl implements RazaService{
 		Raza razaFound = (Raza) statusRaza.getBody();
 		razaFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Raza delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Raza delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -65,7 +68,7 @@ public class RazaServiceImpl implements RazaService{
 	public ResponseEntity<?> findById(Integer id) {
 		Raza raza = razaRepository.findById(id).orElse(null);
 		if(raza == null || raza.getEliminado()) {
-			return new ResponseEntity<>("Raza " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Raza not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(raza, HttpStatus.OK);
@@ -74,6 +77,24 @@ public class RazaServiceImpl implements RazaService{
 	@Override
 	public ResponseEntity<?> findAll() {
 		Collection<Raza> coleccion = razaRepository.findAll().stream().filter(raza -> !raza.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<RazaCustom> coleccion = razaRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<RazaMapper> coleccion = razaRepository.findAllMapper();
 		if (coleccion.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

@@ -26,6 +26,16 @@ public class RazaController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllRazasCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllRazasMapper() {
+		return service.findAllMapper();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdRaza(@PathVariable("id") Integer id) {
 		return service.findById(id);

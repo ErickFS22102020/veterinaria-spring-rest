@@ -74,6 +74,7 @@ public class GoogleStorage {
 	    String publicUrl = "https://storage.cloud.google.com/" + bucketName + "/" + pathName + "/" + fileName;
 	    return publicUrl;
 	}
+	
 }
 	
 

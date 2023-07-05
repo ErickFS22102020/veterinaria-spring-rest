@@ -26,6 +26,16 @@ public class CitaController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllCitasCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllCitasMapper() {
+		return service.findAllMapper();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdCita(@PathVariable("id") Integer id) {
 		return service.findById(id);

@@ -1,7 +1,7 @@
 package idat.proyecto.veterinaria.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class Boleta implements Serializable {
     private Integer id;
 	
 	@Column(name = "fecha_creacion")
-    private LocalDate fecha_creacion;
+    private LocalDateTime fecha_creacion;
 	
 	@Column(name = "sub_total")
     private Double sub_total;
@@ -55,7 +55,7 @@ public class Boleta implements Serializable {
 	
 	@PrePersist
 	public void prePersist() {
-		fecha_creacion = LocalDate.now();
+		fecha_creacion = LocalDateTime.now();
 		eliminado = false;
 	}
 	
@@ -80,11 +80,11 @@ public class Boleta implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDate getFecha_creacion() {
+	public LocalDateTime getFecha_creacion() {
 		return fecha_creacion;
 	}
 
-	public void setFecha_creacion(LocalDate fecha_creacion) {
+	public void setFecha_creacion(LocalDateTime fecha_creacion) {
 		this.fecha_creacion = fecha_creacion;
 	}
 

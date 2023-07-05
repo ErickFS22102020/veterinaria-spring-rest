@@ -22,27 +22,37 @@ public class BoletaController {
 	private BoletaService service;
 	
 	@GetMapping
-	public ResponseEntity<?> findAllVentas() {
+	public ResponseEntity<?> findAllBoletas() {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllBoletasCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllBoletasMapper() {
+		return service.findAllMapper();
+	}
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> findByIdVenta(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> findByIdBoleta(@PathVariable("id") Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insertVenta(@RequestBody Boleta boleta) {
+	public ResponseEntity<?> insertBoleta(@RequestBody Boleta boleta) {
 		return service.insert(boleta);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateVenta(@PathVariable("id") Integer id, @RequestBody Boleta boleta) {
+	public ResponseEntity<?> updateBoleta(@PathVariable("id") Integer id, @RequestBody Boleta boleta) {
 		return service.update(id, boleta);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteVenta(@PathVariable("id") Integer id) {
+	public ResponseEntity<?> deleteBoleta(@PathVariable("id") Integer id) {
 		return service.delete(id);
 	}
 	

@@ -26,6 +26,21 @@ public class TratamientoController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllTratamientosCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllTratamientosMapper() {
+		return service.findAllMapper();
+	}
+	
+	@GetMapping("/mascota_id/{id}")
+	public ResponseEntity<?> findAllTratamientosByMascotaId(@PathVariable("id") Integer id) {
+		return service.findAllByMascotaId(id);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdTratamiento(@PathVariable("id") Integer id) {
 		return service.findById(id);

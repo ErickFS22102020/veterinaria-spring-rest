@@ -1,7 +1,7 @@
 package idat.proyecto.veterinaria.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -29,13 +29,13 @@ public class Mascota implements Serializable{
     private Integer id;
 	
 	@Column(name = "fecha_creacion")
-	private LocalDate fecha_creacion;
+	private LocalDateTime fecha_creacion;
 	
 	@Column(name = "nombre")
 	private String nombre;
 	
 	@Column(name = "sexo")
-	private Boolean sexo;
+	private String sexo;
 	
 	@Column(name = "anios")
 	private Integer anios;
@@ -79,7 +79,8 @@ public class Mascota implements Serializable{
 	
 	@PrePersist
 	public void prePersist() {
-		fecha_creacion = LocalDate.now();
+		fecha_creacion = LocalDateTime.now();
+		foto = "";
 		eliminado = false;
 	}
 
@@ -91,11 +92,11 @@ public class Mascota implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getFecha_creacion() {
+	public LocalDateTime getFecha_creacion() {
 		return fecha_creacion;
 	}
 
-	public void setFecha_creacion(LocalDate fecha_creacion) {
+	public void setFecha_creacion(LocalDateTime fecha_creacion) {
 		this.fecha_creacion = fecha_creacion;
 	}
 
@@ -107,11 +108,11 @@ public class Mascota implements Serializable{
 		this.nombre = nombre;
 	}
 
-	public Boolean getSexo() {
+	public String getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(Boolean sexo) {
+	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
 

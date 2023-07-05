@@ -12,6 +12,8 @@ public interface MascotaService {
 	public abstract ResponseEntity<?> delete(Integer id);
 	public abstract ResponseEntity<?> findById(Integer id);
 	public abstract ResponseEntity<?> findAll();
+	public abstract ResponseEntity<?> findAllCustom();
+	public abstract ResponseEntity<?> findAllMapper();
+	public abstract ResponseEntity<?> findAllByClienteId(Integer cliente_id);
 	public abstract ResponseEntity<?> setFoto(Integer id, MultipartFile file);
-	
 }

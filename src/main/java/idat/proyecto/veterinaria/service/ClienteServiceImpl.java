@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import idat.proyecto.veterinaria.cloud.GoogleStorage;
+import idat.proyecto.veterinaria.custom.ClienteCustom;
 import idat.proyecto.veterinaria.entity.Cliente;
+import idat.proyecto.veterinaria.mapper.ClienteMapper;
 import idat.proyecto.veterinaria.repository.ClienteRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class ClienteServiceImpl implements ClienteService{
@@ -26,7 +29,7 @@ public class ClienteServiceImpl implements ClienteService{
 	@Transactional
 	public ResponseEntity<?> insert(Cliente cliente) {
 		clienteRepository.save(cliente);
-		return new ResponseEntity<>("Cliente create!", HttpStatus.CREATED);
+		return new ResponseEntity<>(Response.createMap("Cliente create!", cliente.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -39,9 +42,10 @@ public class ClienteServiceImpl implements ClienteService{
 		
 		cliente.setId(id);
 		cliente.setFecha_creacion(clienteFound.getFecha_creacion());
+		cliente.setFoto(clienteFound.getFoto());
 		cliente.setEliminado(false);
 		clienteRepository.save(cliente);
-		return new ResponseEntity<>("Cliente update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Cliente update!", cliente.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -53,7 +57,7 @@ public class ClienteServiceImpl implements ClienteService{
 		Cliente clienteFound = (Cliente) statusCliente.getBody();
 		clienteFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Cliente delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Cliente delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -61,7 +65,7 @@ public class ClienteServiceImpl implements ClienteService{
 	public ResponseEntity<?> findById(Integer id) {
 		Cliente cliente = clienteRepository.findById(id).orElse(null);
 		if(cliente == null || cliente.getEliminado()) {
-			return new ResponseEntity<>("Cliente " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Cliente not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(cliente, HttpStatus.OK);
@@ -82,14 +86,33 @@ public class ClienteServiceImpl implements ClienteService{
 		
 		ResponseEntity<?> statusCliente = findById(id);
 		if (statusCliente.getStatusCode() != HttpStatus.OK) return statusCliente;
+			
 		Cliente clienteFound = (Cliente) statusCliente.getBody();
-		
+
 		try {
 			clienteFound.setFoto(storage.uploadImage(id.toString(), file));
 			return new ResponseEntity<>("Foto Cliente saved!", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Ocurrio un error, intente nuevamente...", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<ClienteCustom> coleccion = clienteRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<ClienteMapper> coleccion = clienteRepository.findAllMapper();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
 	}
 
 }

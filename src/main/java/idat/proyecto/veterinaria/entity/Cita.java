@@ -10,8 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "cita")
@@ -36,8 +39,19 @@ public class Cita implements Serializable{
 	@Column(name = "motivo")
 	private String motivo;
 	
+	@Column(name = "hechos")
+	private String hechos;
+	
 	@Column(name = "eliminado")
 	private Boolean eliminado;
+	
+	@JsonIgnore
+	@OneToOne(mappedBy = "cita")
+	private Banio banio;
+	
+	@JsonIgnore
+	@OneToOne(mappedBy = "cita")
+	private Tratamiento tratamiento;
 	
 	@ManyToOne
     @JoinColumn(name = "mascota_id")
@@ -47,6 +61,7 @@ public class Cita implements Serializable{
 	
 	@PrePersist
 	public void prePersist() {
+		this.estado = "pendiente";
 		eliminado = false;
 	}
 	
@@ -90,12 +105,36 @@ public class Cita implements Serializable{
 		this.motivo = motivo;
 	}
 
+	public String getHechos() {
+		return hechos;
+	}
+
+	public void setHechos(String hechos) {
+		this.hechos = hechos;
+	}
+
 	public Boolean getEliminado() {
 		return eliminado;
 	}
 
 	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+
+	public Banio getBanio() {
+		return banio;
+	}
+
+	public void setBanio(Banio banio) {
+		this.banio = banio;
+	}
+
+	public Tratamiento getTratamiento() {
+		return tratamiento;
+	}
+
+	public void setTratamiento(Tratamiento tratamiento) {
+		this.tratamiento = tratamiento;
 	}
 
 	public Mascota getMascota() {

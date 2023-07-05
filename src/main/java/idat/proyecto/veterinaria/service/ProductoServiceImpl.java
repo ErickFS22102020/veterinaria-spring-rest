@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import idat.proyecto.veterinaria.cloud.GoogleStorage;
+import idat.proyecto.veterinaria.custom.ProductoCustom;
 import idat.proyecto.veterinaria.entity.Producto;
+import idat.proyecto.veterinaria.mapper.ProductoMapper;
 import idat.proyecto.veterinaria.repository.ProductoRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class ProductoServiceImpl implements ProductoService{
@@ -33,7 +36,7 @@ public class ProductoServiceImpl implements ProductoService{
 		if (statusCategoria.getStatusCode() != HttpStatus.OK) return statusCategoria;
 		
 		productoRepository.save(producto);
-		return new ResponseEntity<>("Producto create!", HttpStatus.CREATED);
+		return new ResponseEntity<>(Response.createMap("Producto create!", producto.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class ProductoServiceImpl implements ProductoService{
 		producto.setFecha_creacion(productoFound.getFecha_creacion());
 		producto.setEliminado(false);
 		productoRepository.save(producto);
-		return new ResponseEntity<>("Producto update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Producto update!", producto.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class ProductoServiceImpl implements ProductoService{
 		Producto productoFound = (Producto) statusProducto.getBody();
 		productoFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Producto delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Producto delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -71,7 +74,7 @@ public class ProductoServiceImpl implements ProductoService{
 	public ResponseEntity<?> findById(Integer id) {
 		Producto producto = productoRepository.findById(id).orElse(null);
 		if(producto == null || producto.getEliminado()) {
-			return new ResponseEntity<>("Producto " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Producto not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(producto, HttpStatus.OK);
@@ -80,6 +83,24 @@ public class ProductoServiceImpl implements ProductoService{
 	@Override
 	public ResponseEntity<?> findAll() {
 		Collection<Producto> coleccion = productoRepository.findAll().stream().filter(producto -> !producto.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<ProductoCustom> coleccion = productoRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<ProductoMapper> coleccion = productoRepository.findAllMapper();
 		if (coleccion.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

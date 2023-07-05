@@ -28,6 +28,16 @@ public class ProductoController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllProductosCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllProductosMapper() {
+		return service.findAllMapper();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdProducto(@PathVariable("id") Integer id) {
 		return service.findById(id);

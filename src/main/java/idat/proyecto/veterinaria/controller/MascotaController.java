@@ -28,6 +28,21 @@ public class MascotaController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllMascotasCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllMascotasMapper() {
+		return service.findAllMapper();
+	}
+	
+	@GetMapping("/cliente_id/{id}")
+	public ResponseEntity<?> findAllMascotasByClienteId(@PathVariable("id") Integer id) {
+		return service.findAllByClienteId(id);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdMascota(@PathVariable("id") Integer id) {
 		return service.findById(id);

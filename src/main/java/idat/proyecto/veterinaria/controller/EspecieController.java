@@ -26,6 +26,16 @@ public class EspecieController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllEspeciesCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllEspeciesMapper() {
+		return service.findAllMapper();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdEspecie(@PathVariable("id") Integer id) {
 		return service.findById(id);

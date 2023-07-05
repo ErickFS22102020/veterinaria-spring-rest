@@ -9,14 +9,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import idat.proyecto.veterinaria.custom.TratamientoCustom;
+import idat.proyecto.veterinaria.entity.Cita;
 import idat.proyecto.veterinaria.entity.Tratamiento;
+import idat.proyecto.veterinaria.mapper.TratamientoMapper;
 import idat.proyecto.veterinaria.repository.TratamientoRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class TratamientoServiceImpl implements TratamientoService{
 
 	@Autowired
 	private TratamientoRepository tratamientoRepository;
+	
+	@Autowired
+	private CitaService citaService;
 	
 	@Autowired
 	private MascotaService mascotaService;
@@ -28,8 +35,34 @@ public class TratamientoServiceImpl implements TratamientoService{
 		ResponseEntity<?> statusMascota = mascotaService.findById(tratamiento.getMascota().getId());
 		if (statusMascota.getStatusCode() != HttpStatus.OK) return statusMascota;
 		
-		tratamientoRepository.save(tratamiento);
-		return new ResponseEntity<>("Tratamiento create!", HttpStatus.CREATED);
+		if (tratamiento.getCita() != null) {
+			
+			ResponseEntity<?> statusCita = citaService.findById(tratamiento.getCita().getId());
+			if (statusCita.getStatusCode() != HttpStatus.OK) return statusCita;
+			Cita citaFound = (Cita) statusCita.getBody();
+			
+			if(citaFound.getMascota().getId() != tratamiento.getMascota().getId()) { 
+				return new ResponseEntity<>("Mascota citada no coincide con el tratamiento", HttpStatus.BAD_REQUEST);
+			}
+			
+			if(citaFound.getEstado().equals("atendida")) { 
+				return new ResponseEntity<>("Cita ya fue atendida", HttpStatus.BAD_REQUEST);
+			}
+			
+			if(citaFound.getEstado().equals("cancelada")) { 
+				return new ResponseEntity<>("Cita esta cancelada", HttpStatus.BAD_REQUEST);
+			}
+			
+			tratamiento = tratamientoRepository.save(tratamiento);
+			citaFound.setEstado("atendida");
+			citaFound.setFecha_atendida(tratamiento.getFecha_creacion());
+			
+			return new ResponseEntity<>(Response.createMap("Tratamiento create!", tratamiento.getId()), HttpStatus.CREATED);
+		} else {
+			tratamientoRepository.save(tratamiento);
+			return new ResponseEntity<>(Response.createMap("Tratamiento create!", tratamiento.getId()), HttpStatus.CREATED);
+		}
+		
 	}
 
 	@Override
@@ -46,8 +79,39 @@ public class TratamientoServiceImpl implements TratamientoService{
 		tratamiento.setId(id);
 		tratamiento.setFecha_creacion(tratamientoFound.getFecha_creacion());
 		tratamiento.setEliminado(false);
+		
+		if (tratamiento.getCita() != null) {
+			
+			ResponseEntity<?> statusCita = citaService.findById(tratamiento.getCita().getId());
+			if (statusCita.getStatusCode() != HttpStatus.OK) return statusCita;
+			Cita citaFound = (Cita) statusCita.getBody();
+			
+			if(citaFound.getMascota().getId() != tratamiento.getMascota().getId()) { 
+				return new ResponseEntity<>("Mascota citada no coincide con el tratamiento", HttpStatus.BAD_REQUEST);
+			}
+			
+			if(citaFound.getEstado().equals("atendida") && citaFound.getTratamiento().getId() != tratamiento.getId()) { 
+				return new ResponseEntity<>("Cita ya fue atendida", HttpStatus.BAD_REQUEST);
+			}
+			
+			if(citaFound.getEstado().equals("cancelada")) { 
+				return new ResponseEntity<>("Cita esta cancelada", HttpStatus.BAD_REQUEST);
+			}
+			
+			citaFound.setEstado("atendida");
+			citaFound.setFecha_atendida(tratamiento.getFecha_creacion());
+			
+		} else {
+			
+			if (tratamientoFound.getCita() != null) {
+				Cita citaFound = tratamientoFound.getCita();
+				citaFound.setEstado("pendiente");
+				citaFound.setFecha_atendida(null);
+			}
+		}
+
 		tratamientoRepository.save(tratamiento);
-		return new ResponseEntity<>("Tratamiento update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Tratamiento update!", tratamiento.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -59,7 +123,7 @@ public class TratamientoServiceImpl implements TratamientoService{
 		Tratamiento tratamientoFound = (Tratamiento) statusTratamiento.getBody();
 		tratamientoFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Tratamiento delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Tratamiento delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -67,7 +131,7 @@ public class TratamientoServiceImpl implements TratamientoService{
 	public ResponseEntity<?> findById(Integer id) {
 		Tratamiento tratamiento = tratamientoRepository.findById(id).orElse(null);
 		if(tratamiento == null || tratamiento.getEliminado()) {
-			return new ResponseEntity<>("Tratamiento " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Tratamiento not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(tratamiento, HttpStatus.OK);
@@ -76,6 +140,33 @@ public class TratamientoServiceImpl implements TratamientoService{
 	@Override
 	public ResponseEntity<?> findAll() {
 		Collection<Tratamiento> coleccion = tratamientoRepository.findAll().stream().filter(tratamiento -> !tratamiento.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<TratamientoCustom> coleccion = tratamientoRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<TratamientoMapper> coleccion = tratamientoRepository.findAllMapper();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<?> findAllByMascotaId(Integer mascota_id) {
+		Collection<TratamientoMapper> coleccion = tratamientoRepository.findAllByMascotaId(mascota_id);
 		if (coleccion.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

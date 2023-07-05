@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import idat.proyecto.veterinaria.custom.CitaCustom;
 import idat.proyecto.veterinaria.entity.Cita;
+import idat.proyecto.veterinaria.mapper.CitaMapper;
 import idat.proyecto.veterinaria.repository.CitaRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class CitaServiceImpl implements CitaService{
@@ -29,7 +32,7 @@ public class CitaServiceImpl implements CitaService{
 		if (statusMascota.getStatusCode() != HttpStatus.OK) return statusMascota;
 		
 		citaRepository.save(cita);
-		return new ResponseEntity<>("Cita create!", HttpStatus.CREATED);
+		return new ResponseEntity<>(Response.createMap("Cita create!", cita.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class CitaServiceImpl implements CitaService{
 		cita.setId(id);
 		cita.setEliminado(false);
 		citaRepository.save(cita);
-		return new ResponseEntity<>("Cita update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Cita update!", cita.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class CitaServiceImpl implements CitaService{
 		Cita citaFound = (Cita) statusCita.getBody();
 		citaFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Cita delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Cita delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -65,7 +68,7 @@ public class CitaServiceImpl implements CitaService{
 	public ResponseEntity<?> findById(Integer id) {
 		Cita cita = citaRepository.findById(id).orElse(null);
 		if(cita == null || cita.getEliminado()) {
-			return new ResponseEntity<>("Cita " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Cita not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(cita, HttpStatus.OK);
@@ -74,6 +77,24 @@ public class CitaServiceImpl implements CitaService{
 	@Override
 	public ResponseEntity<?> findAll() {
 		Collection<Cita> coleccion = citaRepository.findAll().stream().filter(cita -> !cita.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<CitaCustom> coleccion = citaRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<CitaMapper> coleccion = citaRepository.findAllMapper();
 		if (coleccion.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

@@ -1,7 +1,7 @@
 package idat.proyecto.veterinaria.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -25,7 +26,7 @@ public class Banio implements Serializable{
 	private Integer id;
 	
 	@Column(name = "fecha_creacion")
-	private LocalDate fecha_creacion;
+	private LocalDateTime fecha_creacion;
 	
 	@Column(name = "tipo")
 	private String tipo;
@@ -45,6 +46,10 @@ public class Banio implements Serializable{
 	@Column(name = "eliminado")
 	private Boolean eliminado;
 	
+	@OneToOne
+    @JoinColumn(name = "cita_id", unique = true)
+    private Cita cita;
+	
 	@ManyToOne
     @JoinColumn(name = "mascota_id")
 	private Mascota mascota;
@@ -53,8 +58,11 @@ public class Banio implements Serializable{
 
 	@PrePersist
 	public void prePersist() {
-		fecha_creacion = LocalDate.now();
+		fecha_creacion = LocalDateTime.now();
+		foto_entrada = "";
+		foto_salida = "";
 		eliminado = false;
+		if(this.cita != null) this.cita.setFecha_atendida(fecha_creacion);
 	}
 
 	public Integer getId() {
@@ -65,11 +73,11 @@ public class Banio implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getFecha_creacion() {
+	public LocalDateTime getFecha_creacion() {
 		return fecha_creacion;
 	}
 
-	public void setFecha_creacion(LocalDate fecha_creacion) {
+	public void setFecha_creacion(LocalDateTime fecha_creacion) {
 		this.fecha_creacion = fecha_creacion;
 	}
 
@@ -119,6 +127,14 @@ public class Banio implements Serializable{
 
 	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+	
+	public Cita getCita() {
+		return cita;
+	}
+
+	public void setCita(Cita cita) {
+		this.cita = cita;
 	}
 
 	public Mascota getMascota() {

@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import idat.proyecto.veterinaria.cloud.GoogleStorage;
+import idat.proyecto.veterinaria.custom.MascotaCustom;
 import idat.proyecto.veterinaria.entity.Mascota;
+import idat.proyecto.veterinaria.mapper.MascotaMapper;
 import idat.proyecto.veterinaria.repository.MascotaRepository;
+import idat.proyecto.veterinaria.response.Response;
 
 @Service
 public class MascotaServiceImpl implements MascotaService{
@@ -39,7 +42,7 @@ public class MascotaServiceImpl implements MascotaService{
 		if (statusCliente.getStatusCode() != HttpStatus.OK) return statusCliente;
 		
 		mascotaRepository.save(mascota);
-		return new ResponseEntity<>("Mascota create!", HttpStatus.CREATED);
+		return new ResponseEntity<>(Response.createMap("Mascota create!", mascota.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -58,9 +61,10 @@ public class MascotaServiceImpl implements MascotaService{
 		
 		mascota.setId(id);
 		mascota.setFecha_creacion(mascotaFound.getFecha_creacion());
+		mascota.setFoto(mascotaFound.getFoto());
 		mascota.setEliminado(false);
 		mascotaRepository.save(mascota);
-		return new ResponseEntity<>("Mascota update!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Mascota update!", mascota.getId()), HttpStatus.OK);
 	}
 
 	@Override
@@ -72,7 +76,7 @@ public class MascotaServiceImpl implements MascotaService{
 		Mascota mascotaFound = (Mascota) statusMascota.getBody();
 		mascotaFound.setEliminado(true);
 		
-		return new ResponseEntity<>("Mascota delete!", HttpStatus.OK);
+		return new ResponseEntity<>(Response.createMap("Mascota delete!", id), HttpStatus.OK);
 		
 	}
 
@@ -80,7 +84,7 @@ public class MascotaServiceImpl implements MascotaService{
 	public ResponseEntity<?> findById(Integer id) {
 		Mascota mascota = mascotaRepository.findById(id).orElse(null);
 		if(mascota == null || mascota.getEliminado()) {
-			return new ResponseEntity<>("Mascota " + id + " not found!", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(Response.createMap("Mascota not found!", id), HttpStatus.NOT_FOUND);
 			
 		}
 		return new ResponseEntity<>(mascota, HttpStatus.OK);
@@ -89,6 +93,33 @@ public class MascotaServiceImpl implements MascotaService{
 	@Override
 	public ResponseEntity<?> findAll() {
 		Collection<Mascota> coleccion = mascotaRepository.findAll().stream().filter(mascota -> !mascota.getEliminado()).collect(Collectors.toList());
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllCustom() {
+		Collection<MascotaCustom> coleccion = mascotaRepository.findAllCustom();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllMapper() {
+		Collection<MascotaMapper> coleccion = mascotaRepository.findAllMapper();
+		if (coleccion.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(coleccion, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<?> findAllByClienteId(Integer cliente_id) {
+		Collection<MascotaMapper> coleccion = mascotaRepository.findAllMascotasByClienteId(cliente_id);
 		if (coleccion.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

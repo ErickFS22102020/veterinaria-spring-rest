@@ -26,6 +26,16 @@ public class CategoriaController {
 		return service.findAll();
 	}
 	
+	@GetMapping("/custom")
+	public ResponseEntity<?> findAllCategoriasCustom() {
+		return service.findAllCustom();
+	}
+	
+	@GetMapping("/mapper")
+	public ResponseEntity<?> findAllCategoriasMapper() {
+		return service.findAllMapper();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> findByIdCategoria(@PathVariable("id") Integer id) {
 		return service.findById(id);
