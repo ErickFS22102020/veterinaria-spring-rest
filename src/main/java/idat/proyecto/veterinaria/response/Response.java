@@ -18,4 +18,18 @@ public class Response {
         map.put("id", id);
         return map;
     }
+    
+    public static Map<String, Object> createMapUsername(String message, String username) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", message);
+        map.put("username", username);
+        return map;
+    }
+    
+    public static Map<String, Object> createMapAuth(String message, String token) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", message);
+        map.put("token", token);
+        return map;
+    }
 }

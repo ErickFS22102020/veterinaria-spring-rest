@@ -48,6 +48,10 @@ public class Boleta implements Serializable {
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
 	
+	@ManyToOne
+    @JoinColumn(name="usuario_id")
+    private Usuario usuario;
+	
 	@OneToMany(mappedBy="boleta", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DetalleBoleta> detalles = new HashSet<>();
 	
@@ -126,6 +130,14 @@ public class Boleta implements Serializable {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Set<DetalleBoleta> getDetalles() {
