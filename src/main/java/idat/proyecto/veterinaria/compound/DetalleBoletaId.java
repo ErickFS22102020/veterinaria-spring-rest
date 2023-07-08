@@ -16,7 +16,12 @@ public class DetalleBoletaId implements Serializable {
 	@Column(name = "producto_id")
     private Integer producto_id;
     
-    public DetalleBoletaId() {}
+    public DetalleBoletaId() {}   
+
+	public DetalleBoletaId(Integer boleta_id, Integer producto_id) {
+		this.boleta_id = boleta_id;
+		this.producto_id = producto_id;
+	}
 
 	public Integer getBoleta_id() {
 		return boleta_id;

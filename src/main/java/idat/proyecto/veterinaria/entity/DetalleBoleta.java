@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import idat.proyecto.veterinaria.compound.DetalleBoletaId;
@@ -23,7 +24,7 @@ public class DetalleBoleta{
 	@ManyToOne
 	@MapsId("boleta_id")
     @JoinColumn(name = "boleta_id")
-	@JsonIgnore
+	@JsonBackReference
     private Boleta boleta;
 
     @ManyToOne
