@@ -36,8 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/clientes/**").permitAll()
-                .antMatchers("/mascotas/**").hasAuthority("RECEPCIONISTA")
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/mascotas/**").hasAnyAuthority("RECEPCIONISTA","GROOMER","VETERINARIO")
+                .antMatchers("/clientes/**","/citas/**","/boletas/**").hasAuthority("RECEPCIONISTA")
+                .antMatchers("/tratamientos/**").hasAuthority("VETERINARIO")
+                .antMatchers("/banios/**").hasAuthority("GROOMER")
+                .antMatchers("/productos/**").hasAuthority("ALMACENERO")
+                .antMatchers("/usuarios/**","/roles/**").hasAuthority("ADMINISTRADOR")
                 .and()
             .httpBasic()
                 .and()
@@ -45,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors();
     }
 }
 

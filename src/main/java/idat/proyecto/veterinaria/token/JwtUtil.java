@@ -28,7 +28,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -40,6 +40,16 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public Date getExpirationDateFromToken(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return claims.getExpiration();
+    }
+    
+    public Long getRemainingTime(String token) {
+        Date expiration = getExpirationDateFromToken(token);
+        return expiration.getTime() - System.currentTimeMillis();
     }
 
     public String getUsernameFromToken(String token) {
